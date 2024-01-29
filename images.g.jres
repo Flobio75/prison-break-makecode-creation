@@ -1,0 +1,44 @@
+{
+    "image1": {
+        "data": "hwQQAAgAAAAzMzNEIiIiRCIiIkQiIiJEMzMzRCIiIkQiIiJEIiIiRDMzM0QiIiJEIiIiRCIiIkQzMzNEIiIiRCIiIkQiIiJE",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "TopRow"
+    },
+    "image2": {
+        "data": "hwQOAAYAAAAjMjMAIzIiACMyIgAzMyIAIzIiACMyIgAjMiIAIzIzACMyIgAjMiIAMzMiACMyIgAjMiIAIzIiAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "brickWall"
+    },
+    "image4": {
+        "data": "hwQMABcAAAAAAAAAAAAAFBQU1A0AQAAAAAAUFBQU1A0ARETU3QAUFBQzMwNARETU3Q0UFBQUFARERHTU0g0UFBQUFARERETULd0UFBQUFARERETULd0UFBQUFARERHTU0g0UFBQUFARARETU3Q0UFBQUFAQARETU3QAUFBQzMwMAQAAAAAAUFBQU1A0AAAAAAAAAFBQU1A0=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "happyEscapy"
+    },
+    "image3": {
+        "data": "hwQMABcAAAAAAAAAAAAAFBQU1A0AQAAAAAAUFBQU1A0ARETU3QAUFBQzMwNARETU3Q0UFBQUFARERHTULQ0UFBQUFARERETU0t0UFBQUFARERETU0t0UFBQUFARERHTULQ0UFBQUFARARETU3Q0UFBQUFAQARETU3QAUFBQzMwMAQAAAAAAUFBQU1A0AAAAAAAAAFBQU1A0=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "sadEscaper"
+    },
+    "image6": {
+        "data": "hwQIAAwAAAAAAADkTgAAAAAAQOROBAAAAABE5E5EAAAA4ETkTkQAAAAORORORAAA4ABE5E5EAAAOAEDkTgQAAAAAAOROAAAA",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "babomb"
+    },
+    "image5": {
+        "data": "hwQMAAwAAAAAAAAAUFUAAAAAAABgVQAAAAAAAFBVAAAAAAAAYFUAAAAAAABQVQAAAAAAAGBVAAAAAAAAUFUAAAAAAABgVQAAAAAAAFBVAAAAAAAAYFUAAAAAAABQVQAAAAAAAAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "bucket"
+    },
+    "anim1": {
+        "namespace": "myAnimations",
+        "id": "anim1",
+        "mimeType": "application/mkcd-animation",
+        "data": "YzgwMDA4MDAwYzAwMDMwMDAwMDAwMDBlMDAwMGUwMDAwMDAwMGUwMDAwZTAwMDAwMDA0NDQ0MDA0MDQ0NDQwNDQ0NDQ0NDQ0ZWVlZWVlZWVlZWVlZWVlZTQ0NDQ0NDQ0NDA0NDQ0MDQwMDQ0NDQwMDAwMDAwMDBhMDAwMGUwMDAwMDAwMGUwMDAwZTAwMDAwMDA0NDQ0MDA0MDQ0NDQwNDQ0NDQ0NDQ0ZWVlZWVlZWVlZWVlZWVlZTQ0NDQ0NDQ0NDA0NDQ0MDQwMDQ0NDQwMDAwMDAwMDBmMDAwMGUwMDAwMDAwMGUwMDAwZTAwMDAwMDA0NDQ0MDA0MDQ0NDQwNDQ0NDQ0NDQ0ZWVlZWVlZWVlZWVlZWVlZTQ0NDQ0NDQ0NDA0NDQ0MDQwMDQ0NDQwMA==",
+        "displayName": "litbomb"
+    },
+    "*": {
+        "mimeType": "image/x-mkcd-f4",
+        "dataEncoding": "base64",
+        "namespace": "myImages"
+    }
+}

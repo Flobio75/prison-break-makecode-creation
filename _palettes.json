@@ -1,0 +1,28 @@
+{
+    "nextPaletteID": 1,
+    "palettes": {
+        "custom0": {
+            "id": "custom0",
+            "name": "PrisonBreak",
+            "colors": [
+                "#000000",
+                "#FFFFFF",
+                "#680303",
+                "#999999",
+                "#000000",
+                "#E38359",
+                "#14A5FF",
+                "#78DC52",
+                "#003FAD",
+                "#87F2FF",
+                "#FFF700",
+                "#FFEDE5",
+                "#5C406c",
+                "#E5CDC4",
+                "#91463d",
+                "#FF7B00"
+            ],
+            "custom": true
+        }
+    }
+}
