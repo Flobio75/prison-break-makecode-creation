@@ -50,6 +50,11 @@ function level1 () {
     dropSpeed = 10
     successState = 1
 }
+function initBaddy () {
+    baddy = sprites.create(assets.image`sadEscaper`, SpriteKind.Enemy)
+    baddy.setPosition(10, 15)
+    baddy.setStayInScreen(true)
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     startLevel(currentLevel)
 })
@@ -148,9 +153,7 @@ function initPlayfield () {
         }
         row += 6
     }
-    baddy = sprites.create(assets.image`sadEscaper`, SpriteKind.Enemy)
-    baddy.setPosition(10, 15)
-    baddy.setStayInScreen(true)
+    initBaddy()
     bomb = sprites.create(assets.image`babomb`, SpriteKind.Projectile)
     bomb.setStayInScreen(true)
     bomb.setPosition(baddy.x, 25)
@@ -274,9 +277,9 @@ let bucket: Sprite = null
 let value: Sprite = null
 let row = 0
 let playerSprite: Sprite = null
-let baddy: Sprite = null
 let bomb: Sprite = null
 let buckets: Sprite[] = []
+let baddy: Sprite = null
 let successState = 0
 let dropSpeed = 0
 let dropInterval = 0
