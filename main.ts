@@ -51,7 +51,7 @@ function level1 () {
     successState = 1
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    startLevel(currentLevel2)
+    startLevel(currentLevel)
 })
 function syncBuckets () {
     while (index <= buckets.length - 2) {
@@ -126,8 +126,8 @@ function pauseLevel () {
     controller.moveSprite(playerSprite, 0, 0)
     playerSprite.setVelocity(0, 0)
     baddy.setVelocity(0, 0)
-    for (let value2 of sprites.allOfKind(SpriteKind.Projectile)) {
-        value2.vy = 0
+    for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
+        value.vy = 0
     }
 }
 function initPlayfield () {
@@ -135,16 +135,16 @@ function initPlayfield () {
     buckets = []
     scene.setBackgroundColor(9)
     row = 30
-    for (let index2 = 0; index2 <= 160; index2++) {
-        value4 = sprites.create(assets.image`TopRow`, SpriteKind.Background)
-        value4.setPosition(index2, row)
-        index2 += 15
+    for (let index = 0; index <= 160; index++) {
+        value = sprites.create(assets.image`TopRow`, SpriteKind.Background)
+        value.setPosition(index, row)
+        index += 15
     }
     row = 37
     for (let index2 = 0; index2 < 15; index2++) {
         for (let column = 0; column <= 160; column++) {
-            value4 = sprites.create(assets.image`brickWall`, SpriteKind.Background)
-            value4.setPosition(column, row)
+            value = sprites.create(assets.image`brickWall`, SpriteKind.Background)
+            value.setPosition(column, row)
             column += 13
         }
         row += 6
@@ -165,9 +165,9 @@ function initPlayfield () {
     playerSprite.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 36)
     playerSprite.setStayInScreen(true)
     buckets.push(playerSprite)
-    for (let index4 = 0; index4 <= 1; index4++) {
+    for (let index = 0; index <= 1; index++) {
         bucket = sprites.create(assets.image`bucket`, SpriteKind.Player)
-        bucket.setPosition(scene.screenWidth() / 2, playerSprite.y + (12 + index4 * 12))
+        bucket.setPosition(scene.screenWidth() / 2, playerSprite.y + (12 + index * 12))
         buckets.push(bucket)
     }
 }
@@ -231,7 +231,7 @@ function updateGame () {
     }
 }
 function updateLevel () {
-    currentLevel2 += successState
+    currentLevel += successState
     gameState = 1
 }
 function startLevel (currentLevel: number) {
@@ -259,12 +259,12 @@ function startLevel (currentLevel: number) {
 }
 function levelFail () {
     pauseLevel()
-    for (let value3 of sprites.allOfKind(SpriteKind.Projectile)) {
+    for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
         sprites.destroy(sprites.allOfKind(SpriteKind.Projectile).pop(), effects.fire, 500)
         music.play(music.melodyPlayable(music.buzzer), music.PlaybackMode.UntilDone)
     }
     sprites.destroy(buckets.pop())
-    if (currentLevel2 == 1) {
+    if (currentLevel == 1) {
         successState = 0
     } else {
         successState = -1
@@ -272,7 +272,7 @@ function levelFail () {
     updateLevel()
 }
 let bucket: Sprite = null
-let value4: Sprite = null
+let value: Sprite = null
 let row = 0
 let playerSprite: Sprite = null
 let baddy: Sprite = null
@@ -292,9 +292,9 @@ let bombScore = 0
 let bombCount = 0
 let bomberSpeed = 0
 let gameState = 0
-let currentLevel2 = 0
+let currentLevel = 0
 initPlayfield()
-currentLevel2 = 1
+currentLevel = 1
 gameState = 1
 game.onUpdate(function () {
     updateGame()
