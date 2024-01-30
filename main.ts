@@ -51,7 +51,8 @@ function level1 () {
     successState = 1
 }
 function initBaddy () {
-    baddy = sprites.create(assets.image`sadEscaper`, SpriteKind.Enemy)
+    baddyImages = [assets.image`sadEscaper`, assets.image`happyEscapy`]
+    baddy = sprites.create(baddyImages[0], SpriteKind.Enemy)
     baddy.setPosition(10, 15)
     baddy.setStayInScreen(true)
 }
@@ -133,6 +134,9 @@ function pauseLevel () {
     for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
         value.vy = 0
     }
+    baddy.sayText("hahaha")
+    baddyFace = 1
+    baddy.setImage(baddyImages[baddyFace])
 }
 function initPlayfield () {
     directionChange = 0
@@ -258,6 +262,10 @@ function startLevel (currentLevel: number) {
     controller.moveSprite(playerSprite, 100, 0)
     playerSprite.setVelocity(100, 0)
     baddy.setVelocity(bomberSpeed, 0)
+    if (baddyFace == 1) {
+        baddyFace = 0
+        baddy.setImage(baddyImages[baddyFace])
+    }
 }
 function levelFail () {
     pauseLevel()
@@ -276,10 +284,12 @@ function levelFail () {
 let bucket: Sprite = null
 let value: Sprite = null
 let row = 0
+let baddyFace = 0
 let playerSprite: Sprite = null
 let bomb: Sprite = null
 let buckets: Sprite[] = []
 let baddy: Sprite = null
+let baddyImages: Image[] = []
 let successState = 0
 let dropSpeed = 0
 let dropInterval = 0
