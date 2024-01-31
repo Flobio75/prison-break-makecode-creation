@@ -50,17 +50,13 @@ function level1 () {
     dropSpeed = 10
     successState = 1
 }
-function initBaddy () {
-    baddy = sprites.create(assets.image`sadEscaper`, SpriteKind.Enemy)
-    baddy.setPosition(10, 15)
-    baddy.setStayInScreen(true)
-}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     startLevel(currentLevel)
 })
 function syncBuckets () {
-    for (let index = 0; index <= buckets.length - 2; index++) {
+    while (index <= buckets.length - 2) {
         buckets[index + 1].x = buckets[0].x
+        index += 1
     }
     bomb.x = baddy.x
 }
@@ -145,7 +141,7 @@ function initPlayfield () {
         index += 15
     }
     row = 37
-    for (let index = 0; index < 15; index++) {
+    for (let index2 = 0; index2 < 15; index2++) {
         for (let column = 0; column <= 160; column++) {
             value = sprites.create(assets.image`brickWall`, SpriteKind.Background)
             value.setPosition(column, row)
@@ -153,7 +149,9 @@ function initPlayfield () {
         }
         row += 6
     }
-    initBaddy()
+    baddy = sprites.create(assets.image`sadEscaper`, SpriteKind.Enemy)
+    baddy.setPosition(10, 15)
+    baddy.setStayInScreen(true)
     bomb = sprites.create(assets.image`babomb`, SpriteKind.Projectile)
     bomb.setStayInScreen(true)
     bomb.setPosition(baddy.x, 25)
@@ -277,9 +275,10 @@ let bucket: Sprite = null
 let value: Sprite = null
 let row = 0
 let playerSprite: Sprite = null
+let baddy: Sprite = null
 let bomb: Sprite = null
 let buckets: Sprite[] = []
-let baddy: Sprite = null
+let index = 0
 let successState = 0
 let dropSpeed = 0
 let dropInterval = 0
