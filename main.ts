@@ -32,7 +32,7 @@ function level4 () {
 function checkExplosion () {
     for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
         if (value.y > scene.screenHeight()) {
-            baddy.setImage(baddyImages[0])
+            baddy.setImage(baddyImages[currentLevel + 8])
             levelFail()
         }
     }
@@ -50,6 +50,11 @@ function level1 () {
     dropInterval = randint(dropIntervalLB, dropIntervalUB)
     dropSpeed = 10
     successState = 1
+}
+function addBucket (numBuckets: number) {
+    bucket = sprites.create(assets.image`bucket`, SpriteKind.Player)
+    bucket.setPosition(scene.screenWidth() / 2, playerSprite.y + (12 + numBuckets * 12))
+    buckets.push(bucket)
 }
 function initBaddy () {
     baddyImages = [
@@ -194,10 +199,21 @@ function initPlayfield () {
     playerSprite.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 36)
     playerSprite.setStayInScreen(true)
     buckets.push(playerSprite)
-    for (let index = 0; index <= 1; index++) {
-        bucket = sprites.create(assets.image`bucket`, SpriteKind.Player)
-        bucket.setPosition(scene.screenWidth() / 2, playerSprite.y + (12 + index * 12))
-        buckets.push(bucket)
+    console.logValue("x", MAX_BUCKETS - 2)
+    for (let index = 0; index <= MAX_BUCKETS - 2; index++) {
+        console.logValue("x", MAX_BUCKETS - 2)
+        addBucket(index)
+        console.logValue("buckets=", buckets.length)
+    }
+}
+function extraLife () {
+    if (info.score() >= nextExtraLife) {
+        music.play(music.melodyPlayable(music.powerUp), music.PlaybackMode.UntilDone)
+        nextExtraLife += MAX_LIFE_INTERVAL
+        baddy.setImage(baddyImages[currentLevel + 17])
+        if (buckets.length < MAX_BUCKETS) {
+            addBucket(buckets.length - 1)
+        }
     }
 }
 function level7 () {
@@ -217,6 +233,7 @@ function level7 () {
 function updateGame () {
     syncBuckets()
     checkExplosion()
+    extraLife()
     if (gameState == 0) {
         if (bombsDropped < bombCount) {
             timer.throttle("BombDrop", dropInterval, function () {
@@ -309,24 +326,16 @@ function dropBomb () {
     bombsDropped += 1
 }
 /**
- * Extra life for every 1k
- * 
- * Add surprise every extra life
- * 
- * Sound for extra life
- * 
  * Game over logic
  * 
  * game over cinematic
- * 
- * Smile fail at the right level
  */
-let bucket: Sprite = null
 let value: Sprite = null
 let row = 0
-let playerSprite: Sprite = null
 let bomb: Sprite = null
 let buckets: Sprite[] = []
+let playerSprite: Sprite = null
+let bucket: Sprite = null
 let baddyImages: Image[] = []
 let baddy: Sprite = null
 let successState = 0
@@ -341,13 +350,17 @@ let bombsDropped = 0
 let bombScore = 0
 let bombCount = 0
 let bomberSpeed = 0
+let MAX_BUCKETS = 0
+let nextExtraLife = 0
+let MAX_LIFE_INTERVAL = 0
 let gameState = 0
 let currentLevel = 0
-initPlayfield()
 currentLevel = 1
 gameState = 1
-let MAX_LIFE_INTERVAL = 1000
-let nextExtraLife = MAX_LIFE_INTERVAL
+MAX_LIFE_INTERVAL = 1000
+nextExtraLife = MAX_LIFE_INTERVAL
+MAX_BUCKETS = 3
+initPlayfield()
 game.onUpdate(function () {
     updateGame()
 })
