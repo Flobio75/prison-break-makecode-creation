@@ -128,7 +128,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, ot
 function pauseLevel () {
     gameState = 2
     controller.moveSprite(playerSprite, 0, 0)
-    playerSprite.setVelocity(0, 0)
     baddy.setVelocity(0, 0)
     for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
         value.vy = 0
@@ -256,7 +255,6 @@ function startLevel (currentLevel: number) {
     }
     gameState = 0
     controller.moveSprite(playerSprite, 100, 0)
-    playerSprite.setVelocity(100, 0)
     baddy.setVelocity(bomberSpeed, 0)
 }
 function levelFail () {
