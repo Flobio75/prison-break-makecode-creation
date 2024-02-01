@@ -129,14 +129,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, ot
 function pauseLevel () {
     gameState = 2
     controller.moveSprite(playerSprite, 0, 0)
-    playerSprite.setVelocity(0, 0)
     baddy.setVelocity(0, 0)
     for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
         value.vy = 0
     }
-    baddy.sayText("hahaha")
-    baddyFace = 1
-    baddy.setImage(baddyImages[baddyFace])
+    baddy.setImage(baddyImages[1])
 }
 function initPlayfield () {
     directionChange = 0
@@ -260,7 +257,6 @@ function startLevel (currentLevel: number) {
     }
     gameState = 0
     controller.moveSprite(playerSprite, 100, 0)
-    playerSprite.setVelocity(100, 0)
     baddy.setVelocity(bomberSpeed, 0)
     if (baddyFace == 1) {
         baddyFace = 0
@@ -281,10 +277,10 @@ function levelFail () {
     }
     updateLevel()
 }
+let baddyFace = 0
 let bucket: Sprite = null
 let value: Sprite = null
 let row = 0
-let baddyFace = 0
 let playerSprite: Sprite = null
 let bomb: Sprite = null
 let buckets: Sprite[] = []
