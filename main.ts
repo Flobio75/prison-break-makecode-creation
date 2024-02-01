@@ -1,19 +1,6 @@
 namespace SpriteKind {
     export const Background = SpriteKind.create()
 }
-/**
- * Extra life for every 1k
- * 
- * Add surprise every extra life
- * 
- * Sound for extra life
- * 
- * Game over logic
- * 
- * game over cinematic
- * 
- * Smile fail at the right level
- */
 function level8 () {
     bomberSpeed = 100
     bombCount = 150
@@ -233,31 +220,15 @@ function updateGame () {
     if (gameState == 0) {
         if (bombsDropped < bombCount) {
             timer.throttle("BombDrop", dropInterval, function () {
-                bomb.setVelocity(0, dropSpeed)
-                bomb = sprites.create(assets.image`babomb`, SpriteKind.Projectile)
-                bomb.setPosition(baddy.x, 25)
-                animation.runImageAnimation(
-                bomb,
-                assets.animation`litbomb`,
-                200,
-                true
-                )
-                dropInterval = randint(dropIntervalLB, dropIntervalUB)
-                bombsDropped += 1
+                dropBomb()
                 timer.background(function () {
-                    if (baddy.x <= 8) {
-                        bomberSpeed = bomberSpeed * -1
-                        baddy.setVelocity(bomberSpeed, 0)
-                    } else if (baddy.x >= 148) {
-                        bomberSpeed = bomberSpeed * -1
-                        baddy.setVelocity(bomberSpeed, 0)
-                    } else {
-                        timer.throttle("changeDirection", directionChange, function () {
-                            bomberSpeed = bomberSpeed * -1
-                            baddy.setVelocity(bomberSpeed, 0)
-                            directionChange = randint(directionChangeLB, directionChangeUB)
-                        })
+                    if (baddyEdgeDetect() == 0) {
+                        changeBaddyDirection()
                     }
+                    timer.throttle("changeDirection", directionChange, function () {
+                        changeBaddyDirection()
+                        directionChange = randint(directionChangeLB, directionChangeUB)
+                    })
                 })
             })
         } else {
@@ -267,14 +238,25 @@ function updateGame () {
         baddy.setVelocity(0, 0)
         if (sprites.allOfKind(SpriteKind.Projectile).length == 1) {
             updateLevel()
-        } else {
-            checkExplosion()
         }
     }
 }
 function updateLevel () {
     currentLevel += successState
     gameState = 1
+}
+function changeBaddyDirection () {
+    bomberSpeed = bomberSpeed * -1
+    baddy.setVelocity(bomberSpeed, 0)
+}
+function baddyEdgeDetect () {
+    if (baddy.x <= 8) {
+        return 0
+    } else if (baddy.x >= 148) {
+        return 0
+    } else {
+        return 1
+    }
 }
 function startLevel (currentLevel: number) {
     if (currentLevel == 1) {
@@ -313,6 +295,32 @@ function levelFail () {
     }
     updateLevel()
 }
+function dropBomb () {
+    bomb.setVelocity(0, dropSpeed)
+    bomb = sprites.create(assets.image`babomb`, SpriteKind.Projectile)
+    bomb.setPosition(baddy.x, 25)
+    animation.runImageAnimation(
+    bomb,
+    assets.animation`litbomb`,
+    200,
+    true
+    )
+    dropInterval = randint(dropIntervalLB, dropIntervalUB)
+    bombsDropped += 1
+}
+/**
+ * Extra life for every 1k
+ * 
+ * Add surprise every extra life
+ * 
+ * Sound for extra life
+ * 
+ * Game over logic
+ * 
+ * game over cinematic
+ * 
+ * Smile fail at the right level
+ */
 let bucket: Sprite = null
 let value: Sprite = null
 let row = 0
@@ -339,6 +347,7 @@ initPlayfield()
 currentLevel = 1
 gameState = 1
 let MAX_LIFE_INTERVAL = 1000
+let nextExtraLife = MAX_LIFE_INTERVAL
 game.onUpdate(function () {
     updateGame()
 })
