@@ -1,9 +1,7 @@
 namespace SpriteKind {
     export const Background = SpriteKind.create()
 }
-
-function level8() {
-    
+function level8 () {
     bomberSpeed = 100
     bombCount = 150
     bombScore = 8
@@ -17,9 +15,7 @@ function level8() {
     dropSpeed = 100
     successState = 0
 }
-
-function level4() {
-    
+function level4 () {
     bomberSpeed = 50
     bombCount = 40
     bombScore = 4
@@ -33,18 +29,14 @@ function level4() {
     dropSpeed = 40
     successState = 1
 }
-
-function checkExplosion() {
+function checkExplosion () {
     for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
         if (value.y > scene.screenHeight()) {
             levelFail()
         }
-        
     }
 }
-
-function level1() {
-    
+function level1 () {
     bomberSpeed = 20
     bombCount = 10
     bombScore = 1
@@ -58,31 +50,21 @@ function level1() {
     dropSpeed = 10
     successState = 1
 }
-
-function initBaddy() {
-    
-    baddyImages = [assets.image`
-            sadEscaper
-        `, assets.image`happyEscapy`]
-    baddy = sprites.create(baddyImages[0], SpriteKind.Enemy)
+function initBaddy () {
+    baddy = sprites.create(assets.image`sadEscaper`, SpriteKind.Enemy)
     baddy.setPosition(10, 15)
     baddy.setStayInScreen(true)
 }
-
-controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
-    startLevel(currentLevel2)
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    startLevel(currentLevel)
 })
-function syncBuckets() {
-    let index = 0
-    while (index <= buckets.length - 2) {
+function syncBuckets () {
+    for (let index = 0; index <= buckets.length - 2; index++) {
         buckets[index + 1].x = buckets[0].x
-        index += 1
     }
     bomb.x = baddy.x
 }
-
-function level6() {
-    
+function level6 () {
     bomberSpeed = 70
     bombCount = 75
     bombScore = 6
@@ -96,9 +78,7 @@ function level6() {
     dropSpeed = 60
     successState = 1
 }
-
-function level5() {
-    
+function level5 () {
     bomberSpeed = 60
     bombCount = 50
     bombScore = 5
@@ -112,9 +92,7 @@ function level5() {
     dropSpeed = 50
     successState = 1
 }
-
-function level3() {
-    
+function level3 () {
     bomberSpeed = 40
     bombCount = 30
     bombScore = 3
@@ -128,9 +106,7 @@ function level3() {
     dropSpeed = 30
     successState = 1
 }
-
-function level2() {
-    
+function level2 () {
     bomberSpeed = 30
     bombCount = 20
     bombScore = 2
@@ -144,76 +120,60 @@ function level2() {
     dropSpeed = 20
     successState = 1
 }
-
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function on_on_overlap(sprite: Sprite, otherSprite: Sprite) {
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     info.changeScoreBy(bombScore)
     sprites.destroy(otherSprite, effects.fountain, 500)
     music.play(music.createSoundEffect(WaveShape.Noise, 400000, 450000, 255, 0, 250, SoundExpressionEffect.None, InterpolationCurve.Curve), music.PlaybackMode.UntilDone)
 })
-function pauseLevel() {
-    
+function pauseLevel () {
     gameState = 2
     controller.moveSprite(playerSprite, 0, 0)
     playerSprite.setVelocity(0, 0)
     baddy.setVelocity(0, 0)
-    for (let value2 of sprites.allOfKind(SpriteKind.Projectile)) {
-        value2.vy = 0
+    for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
+        value.vy = 0
     }
-    baddy.sayText("hahaha")
-    baddyFace = 1
-    baddy.setImage(baddyImages[baddyFace])
 }
-
-function initPlayfield() {
-    
+function initPlayfield () {
     directionChange = 0
     buckets = []
     scene.setBackgroundColor(9)
     row = 30
-    for (let index2 = 0; index2 < 161; index2++) {
-        value4 = sprites.create(assets.image`
-            TopRow
-        `, SpriteKind.Background)
-        value4.setPosition(index2, row)
-        index2 += 15
+    for (let index = 0; index <= 160; index++) {
+        value = sprites.create(assets.image`TopRow`, SpriteKind.Background)
+        value.setPosition(index, row)
+        index += 15
     }
     row = 37
-    for (let index3 = 0; index3 < 15; index3++) {
-        for (let column = 0; column < 161; column++) {
-            value4 = sprites.create(assets.image`
-                brickWall
-            `, SpriteKind.Background)
-            value4.setPosition(column, row)
+    for (let index = 0; index < 15; index++) {
+        for (let column = 0; column <= 160; column++) {
+            value = sprites.create(assets.image`brickWall`, SpriteKind.Background)
+            value.setPosition(column, row)
             column += 13
         }
         row += 6
     }
     initBaddy()
-    bomb = sprites.create(assets.image`
-        babomb
-    `, SpriteKind.Projectile)
+    bomb = sprites.create(assets.image`babomb`, SpriteKind.Projectile)
     bomb.setStayInScreen(true)
     bomb.setPosition(baddy.x, 25)
-    animation.runImageAnimation(bomb, assets.animation`
-        litbomb
-    `, 200, true)
-    playerSprite = sprites.create(assets.image`
-        bucket
-    `, SpriteKind.Player)
+    animation.runImageAnimation(
+    bomb,
+    assets.animation`litbomb`,
+    200,
+    true
+    )
+    playerSprite = sprites.create(assets.image`bucket`, SpriteKind.Player)
     playerSprite.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 36)
     playerSprite.setStayInScreen(true)
     buckets.push(playerSprite)
-    for (let index4 = 0; index4 < 2; index4++) {
-        bucket = sprites.create(assets.image`
-            bucket
-        `, SpriteKind.Player)
-        bucket.setPosition(scene.screenWidth() / 2, playerSprite.y + (12 + index4 * 12))
+    for (let index = 0; index <= 1; index++) {
+        bucket = sprites.create(assets.image`bucket`, SpriteKind.Player)
+        bucket.setPosition(scene.screenWidth() / 2, playerSprite.y + (12 + index * 12))
         buckets.push(bucket)
     }
 }
-
-function level7() {
-    
+function level7 () {
     bomberSpeed = 90
     bombCount = 100
     bombScore = 7
@@ -227,27 +187,24 @@ function level7() {
     dropSpeed = 80
     successState = 1
 }
-
-function updateGame() {
-    
+function updateGame () {
     syncBuckets()
     checkExplosion()
     if (gameState == 0) {
         if (bombsDropped < bombCount) {
-            timer.throttle("BombDrop", dropInterval, function on_throttle() {
-                
+            timer.throttle("BombDrop", dropInterval, function () {
                 bomb.setVelocity(0, dropSpeed)
-                bomb = sprites.create(assets.image`
-                    babomb
-                `, SpriteKind.Projectile)
+                bomb = sprites.create(assets.image`babomb`, SpriteKind.Projectile)
                 bomb.setPosition(baddy.x, 25)
-                animation.runImageAnimation(bomb, assets.animation`
-                    litbomb
-                `, 200, true)
+                animation.runImageAnimation(
+                bomb,
+                assets.animation`litbomb`,
+                200,
+                true
+                )
                 dropInterval = randint(dropIntervalLB, dropIntervalUB)
                 bombsDropped += 1
-                timer.background(function on_background() {
-                    
+                timer.background(function () {
                     if (baddy.x <= 8) {
                         bomberSpeed = bomberSpeed * -1
                         baddy.setVelocity(bomberSpeed, 0)
@@ -255,20 +212,17 @@ function updateGame() {
                         bomberSpeed = bomberSpeed * -1
                         baddy.setVelocity(bomberSpeed, 0)
                     } else {
-                        timer.throttle("changeDirection", directionChange, function on_throttle2() {
-                            
+                        timer.throttle("changeDirection", directionChange, function () {
                             bomberSpeed = bomberSpeed * -1
                             baddy.setVelocity(bomberSpeed, 0)
                             directionChange = randint(directionChangeLB, directionChangeUB)
                         })
                     }
-                    
                 })
             })
         } else {
             gameState = 2
         }
-        
     } else if (gameState == 2) {
         baddy.setVelocity(0, 0)
         if (sprites.allOfKind(SpriteKind.Projectile).length == 1) {
@@ -276,19 +230,13 @@ function updateGame() {
         } else {
             checkExplosion()
         }
-        
     }
-    
 }
-
-function updateLevel() {
-    
-    currentLevel2 += successState
+function updateLevel () {
+    currentLevel += successState
     gameState = 1
 }
-
-function startLevel(currentLevel: number) {
-    
+function startLevel (currentLevel: number) {
     if (currentLevel == 1) {
         level1()
     } else if (currentLevel == 2) {
@@ -306,44 +254,32 @@ function startLevel(currentLevel: number) {
     } else {
         level8()
     }
-    
     gameState = 0
     controller.moveSprite(playerSprite, 100, 0)
     playerSprite.setVelocity(100, 0)
     baddy.setVelocity(bomberSpeed, 0)
-    if (baddyFace == 1) {
-        baddyFace = 0
-        baddy.setImage(baddyImages[baddyFace])
-    }
-    
 }
-
-function levelFail() {
-    
+function levelFail () {
     pauseLevel()
-    for (let value3 of sprites.allOfKind(SpriteKind.Projectile)) {
+    for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
         sprites.destroy(sprites.allOfKind(SpriteKind.Projectile).pop(), effects.fire, 500)
         music.play(music.melodyPlayable(music.buzzer), music.PlaybackMode.UntilDone)
     }
     sprites.destroy(buckets.pop())
-    if (currentLevel2 == 1) {
+    if (currentLevel == 1) {
         successState = 0
     } else {
         successState = -1
     }
-    
     updateLevel()
 }
-
-let bucket : Sprite = null
-let value4 : Sprite = null
+let bucket: Sprite = null
+let value: Sprite = null
 let row = 0
-let baddyFace = 0
-let playerSprite : Sprite = null
-let bomb : Sprite = null
-let buckets : Sprite[] = []
-let baddy : Sprite = null
-let baddyImages : Image[] = []
+let playerSprite: Sprite = null
+let bomb: Sprite = null
+let buckets: Sprite[] = []
+let baddy: Sprite = null
 let successState = 0
 let dropSpeed = 0
 let dropInterval = 0
@@ -357,10 +293,10 @@ let bombScore = 0
 let bombCount = 0
 let bomberSpeed = 0
 let gameState = 0
-let currentLevel2 = 0
+let currentLevel = 0
 initPlayfield()
-currentLevel2 = 1
+currentLevel = 1
 gameState = 1
-game.onUpdate(function on_on_update() {
+game.onUpdate(function () {
     updateGame()
 })
