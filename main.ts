@@ -87,6 +87,7 @@ function initBaddy () {
     baddy = sprites.create(baddyImages[0], SpriteKind.Enemy)
     baddy.setPosition(10, 15)
     baddy.setStayInScreen(true)
+    baddy.setBounceOnWall(true)
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     startLevel(currentLevel)
@@ -152,6 +153,11 @@ function level2 () {
     dropInterval = randint(dropIntervalLB, dropIntervalUB)
     dropSpeed = 20
     successState = 1
+}
+function checkBuckets () {
+    if (buckets.length == 0) {
+        game.gameOver(false)
+    }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
     info.changeScoreBy(bombScore)
@@ -234,14 +240,12 @@ function updateGame () {
     syncBuckets()
     checkExplosion()
     extraLife()
+    checkBuckets()
     if (gameState == 0) {
         if (bombsDropped < bombCount) {
             timer.throttle("BombDrop", dropInterval, function () {
                 dropBomb()
                 timer.background(function () {
-                    if (baddyEdgeDetect() == 0) {
-                        changeBaddyDirection()
-                    }
                     timer.throttle("changeDirection", directionChange, function () {
                         changeBaddyDirection()
                         directionChange = randint(directionChangeLB, directionChangeUB)
@@ -325,11 +329,6 @@ function dropBomb () {
     dropInterval = randint(dropIntervalLB, dropIntervalUB)
     bombsDropped += 1
 }
-/**
- * Game over logic
- * 
- * game over cinematic
- */
 let value: Sprite = null
 let row = 0
 let bomb: Sprite = null
