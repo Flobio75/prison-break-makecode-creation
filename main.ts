@@ -1,6 +1,19 @@
 namespace SpriteKind {
     export const Background = SpriteKind.create()
 }
+/**
+ * Extra life for every 1k
+ * 
+ * Add surprise every extra life
+ * 
+ * Sound for extra life
+ * 
+ * Game over logic
+ * 
+ * game over cinematic
+ * 
+ * Smile fail at the right level
+ */
 function level8 () {
     bomberSpeed = 100
     bombCount = 150
@@ -325,6 +338,7 @@ let currentLevel = 0
 initPlayfield()
 currentLevel = 1
 gameState = 1
+let MAX_LIFE_INTERVAL = 1000
 game.onUpdate(function () {
     updateGame()
 })
