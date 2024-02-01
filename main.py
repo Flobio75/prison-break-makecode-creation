@@ -47,6 +47,17 @@ def level1():
     dropInterval = randint(dropIntervalLB, dropIntervalUB)
     dropSpeed = 10
     successState = 1
+def initBaddy():
+    global baddyImages, baddy
+    baddyImages = [assets.image("""
+            sadEscaper
+        """),
+        assets.image("""
+            happyEscapy
+        """)]
+    baddy = sprites.create(baddyImages[0], SpriteKind.enemy)
+    baddy.set_position(10, 15)
+    baddy.set_stay_in_screen(True)
 
 def on_a_pressed():
     startLevel(currentLevel2)
@@ -130,15 +141,18 @@ def on_on_overlap(sprite, otherSprite):
 sprites.on_overlap(SpriteKind.player, SpriteKind.projectile, on_on_overlap)
 
 def pauseLevel():
-    global gameState
+    global gameState, baddyFace
     gameState = 2
     controller.move_sprite(playerSprite, 0, 0)
     playerSprite.set_velocity(0, 0)
     baddy.set_velocity(0, 0)
     for value2 in sprites.all_of_kind(SpriteKind.projectile):
         value2.vy = 0
+    baddy.say_text("hahaha")
+    baddyFace = 1
+    baddy.set_image(baddyImages[baddyFace])
 def initPlayfield():
-    global directionChange, buckets, row, value4, baddy, bomb, playerSprite, bucket
+    global directionChange, buckets, row, value4, bomb, playerSprite, bucket
     directionChange = 0
     buckets = []
     scene.set_background_color(9)
@@ -158,11 +172,7 @@ def initPlayfield():
             value4.set_position(column, row)
             column += 13
         row += 6
-    baddy = sprites.create(assets.image("""
-        sadEscaper
-    """), SpriteKind.enemy)
-    baddy.set_position(10, 15)
-    baddy.set_stay_in_screen(True)
+    initBaddy()
     bomb = sprites.create(assets.image("""
         babomb
     """), SpriteKind.projectile)
@@ -249,13 +259,10 @@ def updateGame():
             checkExplosion()
 def updateLevel():
     global currentLevel2, gameState
-    console.log_value("success state", successState)
-    console.log_value("current level before", currentLevel2)
     currentLevel2 += successState
-    console.log_value("current level after", currentLevel2)
     gameState = 1
 def startLevel(currentLevel: number):
-    global gameState
+    global gameState, baddyFace
     if currentLevel == 1:
         level1()
     elif currentLevel == 2:
@@ -276,6 +283,9 @@ def startLevel(currentLevel: number):
     controller.move_sprite(playerSprite, 100, 0)
     playerSprite.set_velocity(100, 0)
     baddy.set_velocity(bomberSpeed, 0)
+    if baddyFace == 1:
+        baddyFace = 0
+        baddy.set_image(baddyImages[baddyFace])
 def levelFail():
     global successState
     pauseLevel()
@@ -294,10 +304,12 @@ def levelFail():
 bucket: Sprite = None
 value4: Sprite = None
 row = 0
+baddyFace = 0
 playerSprite: Sprite = None
-baddy: Sprite = None
 bomb: Sprite = None
 buckets: List[Sprite] = []
+baddy: Sprite = None
+baddyImages: List[Image] = []
 successState = 0
 dropSpeed = 0
 dropInterval = 0
