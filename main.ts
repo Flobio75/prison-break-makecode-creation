@@ -51,7 +51,7 @@ function level1 () {
     successState = 1
 }
 function initBaddy () {
-    baddyImages = [assets.image`sadEscaper`, assets.image`happyEscapy`]
+    baddyImages = [assets.image`happyEscaper04`, assets.image`sadEscaper1`]
     baddy = sprites.create(baddyImages[0], SpriteKind.Enemy)
     baddy.setPosition(10, 15)
     baddy.setStayInScreen(true)
