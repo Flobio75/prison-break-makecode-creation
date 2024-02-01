@@ -32,6 +32,7 @@ def level4():
 def checkExplosion():
     for value in sprites.all_of_kind(SpriteKind.projectile):
         if value.y > scene.screen_height():
+            baddy.set_image(baddyImages[currentLevel2 + 8])
             levelFail()
 def level1():
     global bomberSpeed, bombCount, bombScore, bombsDropped, directionChangeLB, directionChangeUB, directionChange, dropIntervalLB, dropIntervalUB, dropInterval, dropSpeed, successState
@@ -47,6 +48,95 @@ def level1():
     dropInterval = randint(dropIntervalLB, dropIntervalUB)
     dropSpeed = 10
     successState = 1
+def addBucket(numBuckets: number):
+    global bucket
+    bucket = sprites.create(assets.image("""
+        bucket
+    """), SpriteKind.player)
+    bucket.set_position(scene.screen_width() / 2,
+        playerSprite.y + (12 + numBuckets * 12))
+    buckets.append(bucket)
+def initBaddy():
+    global baddyImages, baddy
+    baddyImages = [assets.image("""
+            happyEscaper04
+        """),
+        assets.image("""
+            sadEscaper1
+        """),
+        assets.image("""
+            sadEscaper2
+        """),
+        assets.image("""
+            sadEscaper3
+        """),
+        assets.image("""
+            sadEscaper4
+        """),
+        assets.image("""
+            sadEscaper5
+        """),
+        assets.image("""
+            sadEscaper6
+        """),
+        assets.image("""
+            sadEscaper7
+        """),
+        assets.image("""
+            sadEscaper8
+        """),
+        assets.image("""
+            happyEscaper04
+        """),
+        assets.image("""
+            happyEscaper04
+        """),
+        assets.image("""
+            happyEscaper04
+        """),
+        assets.image("""
+            happyEscaper4
+        """),
+        assets.image("""
+            happyEscaper5
+        """),
+        assets.image("""
+            happyEscaper6
+        """),
+        assets.image("""
+            happyEscaper7
+        """),
+        assets.image("""
+            happyEscaper8
+        """),
+        assets.image("""
+            surpriseEscaper13
+        """),
+        assets.image("""
+            surpriseEscaper13
+        """),
+        assets.image("""
+            surpriseEscaper13
+        """),
+        assets.image("""
+            surpriseEscaper4
+        """),
+        assets.image("""
+            surpriseEscaper5
+        """),
+        assets.image("""
+            surpriseEscaper6
+        """),
+        assets.image("""
+            surpriseEscaper7
+        """),
+        assets.image("""
+            surpriseEscaper8
+        """)]
+    baddy = sprites.create(baddyImages[0], SpriteKind.enemy)
+    baddy.set_position(10, 15)
+    baddy.set_stay_in_screen(True)
+    baddy.set_bounce_on_wall(True)
 
 def on_a_pressed():
     startLevel(currentLevel2)
@@ -114,6 +204,10 @@ def level2():
     dropInterval = randint(dropIntervalLB, dropIntervalUB)
     dropSpeed = 20
     successState = 1
+def checkBuckets():
+    if len(buckets) == 0:
+        game.game_over(False)
+        game.set_game_over_effect(False, effects.confetti)
 
 def on_on_overlap(sprite, otherSprite):
     info.change_score_by(bombScore)
@@ -133,12 +227,11 @@ def pauseLevel():
     global gameState
     gameState = 2
     controller.move_sprite(playerSprite, 0, 0)
-    playerSprite.set_velocity(0, 0)
     baddy.set_velocity(0, 0)
     for value2 in sprites.all_of_kind(SpriteKind.projectile):
         value2.vy = 0
 def initPlayfield():
-    global directionChange, buckets, row, value4, baddy, bomb, playerSprite, bucket
+    global directionChange, buckets, row, value4, bomb, playerSprite
     directionChange = 0
     buckets = []
     scene.set_background_color(9)
@@ -158,11 +251,7 @@ def initPlayfield():
             value4.set_position(column, row)
             column += 13
         row += 6
-    baddy = sprites.create(assets.image("""
-        sadEscaper
-    """), SpriteKind.enemy)
-    baddy.set_position(10, 15)
-    baddy.set_stay_in_screen(True)
+    initBaddy()
     bomb = sprites.create(assets.image("""
         babomb
     """), SpriteKind.projectile)
@@ -177,13 +266,22 @@ def initPlayfield():
     playerSprite.set_position(scene.screen_width() / 2, scene.screen_height() - 36)
     playerSprite.set_stay_in_screen(True)
     buckets.append(playerSprite)
-    for index4 in range(2):
-        bucket = sprites.create(assets.image("""
-            bucket
-        """), SpriteKind.player)
-        bucket.set_position(scene.screen_width() / 2,
-            playerSprite.y + (12 + index4 * 12))
-        buckets.append(bucket)
+    console.log_value("x", MAX_BUCKETS - 2)
+    index4 = 0
+    while index4 <= MAX_BUCKETS - 2:
+        console.log_value("x", MAX_BUCKETS - 2)
+        addBucket(index4)
+        console.log_value("buckets=", len(buckets))
+        index4 += 1
+def extraLife():
+    global nextExtraLife
+    if info.score() >= nextExtraLife:
+        music.play(music.melody_playable(music.power_up),
+            music.PlaybackMode.UNTIL_DONE)
+        nextExtraLife += MAX_LIFE_INTERVAL
+        baddy.set_image(baddyImages[currentLevel2 + 17])
+        if len(buckets) < MAX_BUCKETS:
+            addBucket(len(buckets) - 1)
 def level7():
     global bomberSpeed, bombCount, bombScore, bombsDropped, directionChangeLB, directionChangeUB, directionChange, dropIntervalLB, dropIntervalUB, dropInterval, dropSpeed, successState
     bomberSpeed = 90
@@ -202,39 +300,22 @@ def updateGame():
     global gameState
     syncBuckets()
     checkExplosion()
+    extraLife()
+    checkBuckets()
     if gameState == 0:
         if bombsDropped < bombCount:
             
             def on_throttle():
-                global bomb, dropInterval, bombsDropped
-                bomb.set_velocity(0, dropSpeed)
-                bomb = sprites.create(assets.image("""
-                    babomb
-                """), SpriteKind.projectile)
-                bomb.set_position(baddy.x, 25)
-                animation.run_image_animation(bomb, assets.animation("""
-                    litbomb
-                """), 200, True)
-                dropInterval = randint(dropIntervalLB, dropIntervalUB)
-                bombsDropped += 1
+                dropBomb()
                 
                 def on_background():
-                    global bomberSpeed
-                    if baddy.x <= 8:
-                        bomberSpeed = bomberSpeed * -1
-                        baddy.set_velocity(bomberSpeed, 0)
-                    elif baddy.x >= 148:
-                        bomberSpeed = bomberSpeed * -1
-                        baddy.set_velocity(bomberSpeed, 0)
-                    else:
-                        
-                        def on_throttle2():
-                            global bomberSpeed, directionChange
-                            bomberSpeed = bomberSpeed * -1
-                            baddy.set_velocity(bomberSpeed, 0)
-                            directionChange = randint(directionChangeLB, directionChangeUB)
-                        timer.throttle("changeDirection", directionChange, on_throttle2)
-                        
+                    
+                    def on_throttle2():
+                        global directionChange
+                        changeBaddyDirection()
+                        directionChange = randint(directionChangeLB, directionChangeUB)
+                    timer.throttle("changeDirection", directionChange, on_throttle2)
+                    
                 timer.background(on_background)
                 
             timer.throttle("BombDrop", dropInterval, on_throttle)
@@ -245,15 +326,14 @@ def updateGame():
         baddy.set_velocity(0, 0)
         if len(sprites.all_of_kind(SpriteKind.projectile)) == 1:
             updateLevel()
-        else:
-            checkExplosion()
 def updateLevel():
     global currentLevel2, gameState
-    console.log_value("success state", successState)
-    console.log_value("current level before", currentLevel2)
     currentLevel2 += successState
-    console.log_value("current level after", currentLevel2)
     gameState = 1
+def changeBaddyDirection():
+    global bomberSpeed
+    bomberSpeed = bomberSpeed * -1
+    baddy.set_velocity(bomberSpeed, 0)
 def startLevel(currentLevel: number):
     global gameState
     if currentLevel == 1:
@@ -274,8 +354,8 @@ def startLevel(currentLevel: number):
         level8()
     gameState = 0
     controller.move_sprite(playerSprite, 100, 0)
-    playerSprite.set_velocity(100, 0)
     baddy.set_velocity(bomberSpeed, 0)
+    baddy.set_image(baddyImages[currentLevel])
 def levelFail():
     global successState
     pauseLevel()
@@ -291,13 +371,26 @@ def levelFail():
     else:
         successState = -1
     updateLevel()
-bucket: Sprite = None
+def dropBomb():
+    global bomb, dropInterval, bombsDropped
+    bomb.set_velocity(0, dropSpeed)
+    bomb = sprites.create(assets.image("""
+        babomb
+    """), SpriteKind.projectile)
+    bomb.set_position(baddy.x, 25)
+    animation.run_image_animation(bomb, assets.animation("""
+        litbomb
+    """), 200, True)
+    dropInterval = randint(dropIntervalLB, dropIntervalUB)
+    bombsDropped += 1
 value4: Sprite = None
 row = 0
-playerSprite: Sprite = None
-baddy: Sprite = None
 bomb: Sprite = None
 buckets: List[Sprite] = []
+playerSprite: Sprite = None
+bucket: Sprite = None
+baddyImages: List[Image] = []
+baddy: Sprite = None
 successState = 0
 dropSpeed = 0
 dropInterval = 0
@@ -310,11 +403,17 @@ bombsDropped = 0
 bombScore = 0
 bombCount = 0
 bomberSpeed = 0
+MAX_BUCKETS = 0
+nextExtraLife = 0
+MAX_LIFE_INTERVAL = 0
 gameState = 0
 currentLevel2 = 0
 initPlayfield()
 currentLevel2 = 1
 gameState = 1
+MAX_LIFE_INTERVAL = 1000
+nextExtraLife = MAX_LIFE_INTERVAL
+MAX_BUCKETS = 3
 
 def on_on_update():
     updateGame()

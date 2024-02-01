@@ -271,15 +271,6 @@ function changeBaddyDirection () {
     bomberSpeed = bomberSpeed * -1
     baddy.setVelocity(bomberSpeed, 0)
 }
-function baddyEdgeDetect () {
-    if (baddy.x <= 8) {
-        return 0
-    } else if (baddy.x >= 148) {
-        return 0
-    } else {
-        return 1
-    }
-}
 function startLevel (currentLevel: number) {
     if (currentLevel == 1) {
         level1()
@@ -355,12 +346,12 @@ let nextExtraLife = 0
 let MAX_LIFE_INTERVAL = 0
 let gameState = 0
 let currentLevel = 0
-initPlayfield()
 currentLevel = 1
 gameState = 1
 MAX_LIFE_INTERVAL = 1000
 nextExtraLife = MAX_LIFE_INTERVAL
 MAX_BUCKETS = 3
+initPlayfield()
 game.onUpdate(function () {
     updateGame()
 })
