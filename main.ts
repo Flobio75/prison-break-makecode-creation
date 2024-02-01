@@ -50,13 +50,18 @@ function level1 () {
     dropSpeed = 10
     successState = 1
 }
+function initBaddy () {
+    baddyImages = [assets.image`sadEscaper`, assets.image`happyEscapy`]
+    baddy = sprites.create(baddyImages[0], SpriteKind.Enemy)
+    baddy.setPosition(10, 15)
+    baddy.setStayInScreen(true)
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     startLevel(currentLevel)
 })
 function syncBuckets () {
-    while (index <= buckets.length - 2) {
+    for (let index = 0; index <= buckets.length - 2; index++) {
         buckets[index + 1].x = buckets[0].x
-        index += 1
     }
     bomb.x = baddy.x
 }
@@ -129,6 +134,9 @@ function pauseLevel () {
     for (let value of sprites.allOfKind(SpriteKind.Projectile)) {
         value.vy = 0
     }
+    baddy.sayText("hahaha")
+    baddyFace = 1
+    baddy.setImage(baddyImages[baddyFace])
 }
 function initPlayfield () {
     directionChange = 0
@@ -141,7 +149,7 @@ function initPlayfield () {
         index += 15
     }
     row = 37
-    for (let index2 = 0; index2 < 15; index2++) {
+    for (let index = 0; index < 15; index++) {
         for (let column = 0; column <= 160; column++) {
             value = sprites.create(assets.image`brickWall`, SpriteKind.Background)
             value.setPosition(column, row)
@@ -149,9 +157,7 @@ function initPlayfield () {
         }
         row += 6
     }
-    baddy = sprites.create(assets.image`sadEscaper`, SpriteKind.Enemy)
-    baddy.setPosition(10, 15)
-    baddy.setStayInScreen(true)
+    initBaddy()
     bomb = sprites.create(assets.image`babomb`, SpriteKind.Projectile)
     bomb.setStayInScreen(true)
     bomb.setPosition(baddy.x, 25)
@@ -256,6 +262,10 @@ function startLevel (currentLevel: number) {
     controller.moveSprite(playerSprite, 100, 0)
     playerSprite.setVelocity(100, 0)
     baddy.setVelocity(bomberSpeed, 0)
+    if (baddyFace == 1) {
+        baddyFace = 0
+        baddy.setImage(baddyImages[baddyFace])
+    }
 }
 function levelFail () {
     pauseLevel()
@@ -274,11 +284,12 @@ function levelFail () {
 let bucket: Sprite = null
 let value: Sprite = null
 let row = 0
+let baddyFace = 0
 let playerSprite: Sprite = null
-let baddy: Sprite = null
 let bomb: Sprite = null
 let buckets: Sprite[] = []
-let index = 0
+let baddy: Sprite = null
+let baddyImages: Image[] = []
 let successState = 0
 let dropSpeed = 0
 let dropInterval = 0
