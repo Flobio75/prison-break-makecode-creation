@@ -157,6 +157,7 @@ function level2 () {
 function checkBuckets () {
     if (buckets.length == 0) {
         game.gameOver(false)
+        game.setGameOverEffect(false, effects.confetti)
     }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
@@ -354,12 +355,12 @@ let nextExtraLife = 0
 let MAX_LIFE_INTERVAL = 0
 let gameState = 0
 let currentLevel = 0
+initPlayfield()
 currentLevel = 1
 gameState = 1
 MAX_LIFE_INTERVAL = 1000
 nextExtraLife = MAX_LIFE_INTERVAL
 MAX_BUCKETS = 3
-initPlayfield()
 game.onUpdate(function () {
     updateGame()
 })
