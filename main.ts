@@ -206,11 +206,8 @@ function initPlayfield () {
     playerSprite.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 36)
     playerSprite.setStayInScreen(true)
     buckets.push(playerSprite)
-    console.logValue("x", MAX_BUCKETS - 2)
     for (let index = 0; index <= MAX_BUCKETS - 2; index++) {
-        console.logValue("x", MAX_BUCKETS - 2)
         addBucket(index)
-        console.logValue("buckets=", buckets.length)
     }
 }
 function extraLife () {
@@ -246,12 +243,10 @@ function updateGame () {
         if (bombsDropped < bombCount) {
             timer.throttle("BombDrop", dropInterval, function () {
                 dropBomb()
-                timer.background(function () {
-                    timer.throttle("changeDirection", directionChange, function () {
-                        changeBaddyDirection()
-                        directionChange = randint(directionChangeLB, directionChangeUB)
-                    })
-                })
+            })
+            timer.throttle("changeDirection", directionChange, function () {
+                changeBaddyDirection()
+                directionChange = randint(directionChangeLB, directionChangeUB)
             })
         } else {
             gameState = 2
